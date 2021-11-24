@@ -1,0 +1,51 @@
+{
+    "name": "kikytokamuro/futils",
+    "description": "Functional utils",
+    "version": "0.1.0",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Kikytokamuro\\Futils\\": "src/"
+        },
+        "files": [
+            "src/all.php",
+            "src/always.php",
+            "src/any.php",
+            "src/contains.php",
+            "src/drop.php",
+            "src/filter.php",
+            "src/find.php",
+            "src/flatten.php",
+            "src/has.php",
+            "src/head.php",
+            "src/indexOf.php",
+            "src/join.php",
+            "src/last.php",
+            "src/map.php",
+            "src/merge.php",
+            "src/partial.php",
+            "src/pipe.php",
+            "src/reduce.php",
+            "src/replace.php",
+            "src/tail.php",
+            "src/take.php",
+            "src/when.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Daniil Archangelsky",
+            "email": "kiky.tokamuro@yandex.ru"
+        }
+    ],
+    "require": {
+        "php": "^7.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit -c phpunit.xml"
+    }
+}
