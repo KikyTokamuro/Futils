@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kikytokamuro\Futils;
 
 /**
- * always - Creates a function that always returns a given value
+ * always - Creates a function that always returns a given value.
  *
  * @param  mixed $value
  * @return Closure

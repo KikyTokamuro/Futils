@@ -12,7 +12,9 @@
             "src/all.php",
             "src/always.php",
             "src/any.php",
+            "src/compose.php",
             "src/contains.php",
+            "src/difference.php",
             "src/drop.php",
             "src/filter.php",
             "src/find.php",
@@ -25,12 +27,15 @@
             "src/map.php",
             "src/merge.php",
             "src/partial.php",
+            "src/partition.php",
             "src/pipe.php",
             "src/reduce.php",
+            "src/reject.php",
             "src/replace.php",
             "src/tail.php",
             "src/take.php",
-            "src/when.php"
+            "src/when.php",
+            "src/zip.php"
         ]
     },
     "authors": [
@@ -40,7 +45,7 @@
         }
     ],
     "require": {
-        "php": "^7.4"
+        "php": ">=7.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"

@@ -20,9 +20,22 @@ class FutilsTest extends TestCase
         $this->assertEquals(Futils\any(fn($x) => $x == 100)([1, 2, 100]), true);
     }
 
+    public function testCompose(): void
+    {
+        $this->assertEquals(Futils\compose(
+            fn($x) => $x + 1,
+            fn($x) => $x * 100
+        )(2), 201);
+    }
+
     public function testContains(): void
     {
         $this->assertEquals(Futils\contains(1337)([1, 1337, 2]), true);
+    }
+
+    public function testDifference(): void
+    {
+        $this->assertEqualsCanonicalizing(Futils\difference([1, 2, 3, 4])([1, 2]), [3, 4]);
     }
 
     public function testDrop(): void
@@ -90,6 +103,11 @@ class FutilsTest extends TestCase
         $this->assertEquals(Futils\partial(fn($x, $y, $z) => $x + $y + $z)(1, 2)(3), 6);
     }
 
+    public function testPartition(): void
+    {
+        $this->assertEqualsCanonicalizing(Futils\partition(fn($x) => $x > 0)([-1, -2, 1, 2]), [[1, 2], [-1, -2]]);
+    }
+
     public function testPipe(): void
     {
         $this->assertEquals(Futils\pipe(
@@ -101,6 +119,11 @@ class FutilsTest extends TestCase
     public function testReduce(): void
     {
         $this->assertEquals(Futils\reduce(fn($x, $y) => $x + $y)([1, 2, 3]), 6);
+    }
+
+    public function testReject(): void
+    {
+        $this->assertEqualsCanonicalizing(Futils\reject(fn($x) => $x > 0)([-1, -2, 1, 2]), [-1, -2]);
     }
 
     public function testReplace(): void
@@ -116,5 +139,10 @@ class FutilsTest extends TestCase
     public function testWhen(): void
     {
         $this->assertEquals(Futils\when(fn($x) => $x > 100)(fn($x) => $x + 5)(1000), 1005);
+    }
+
+    public function testZip(): void
+    {
+        $this->assertEquals(Futils\zip([1, 2, 3])([4, 5, 6]), [[1, 4], [2, 5], [3, 6]]);
     }
 }

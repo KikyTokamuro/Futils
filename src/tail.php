@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kikytokamuro\Futils;
 
 /**
- * tail - Get tail of array
+ * tail - Get tail of array.
  *
  * @param  mixed $arr
  * @return array

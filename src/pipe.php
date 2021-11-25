@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kikytokamuro\Futils;
 
 /**
- * pipe - Function composition (f1 -> f2 -> ... -> fn)
+ * pipe - Function composition (f1 -> f2 -> ... -> fn).
  *
  * @param  mixed $fns
  * @return Closure

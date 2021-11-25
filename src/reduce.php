@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kikytokamuro\Futils;
 
 /**
- * reduce - Reduce the array to a single value using a callback function
+ * reduce - Reduce the array to a single value using a callback function.
  *
  * @param  mixed $f
  * @return Closure
