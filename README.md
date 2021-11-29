@@ -164,3 +164,27 @@ Zips together its two arguments into a array of arrays.
 ```php
 Futils\zip([1, 2, 3])([4, 5, 6]) // => [[1, 4], [2, 5], [3, 6]]
 ```
+
+#### Monads
+**IdentityMonad** - Just annotates plain values and functions to satisfy the monad laws.
+```php
+(new Futils\IdentityMonad(100))
+    ->bind(fn($x, $n) => $x * $n, 2)
+    ->bind("strval")
+    ->extract() // => "200"
+```
+
+**MaybeMonad** - Encapsulates the type of an undefined value.
+```php
+(new Futils\MaybeMonad("test"))
+    ->bind(fn() => null)
+    ->bind(fn($x) => $x + 1)
+    ->extract() // => null
+```
+
+**ListMonad** - Abstracts away the concept of a list of items.
+```php
+(new Futils\ListMonad([1, new IdentityMonad(2), new MaybeMonad(3), new ListMonad([4])]))
+    ->bind(fn($x) => $x + 100)
+    ->extract() // => [101, 102, 103, [104]]
+```

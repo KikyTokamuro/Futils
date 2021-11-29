@@ -2,6 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 use Kikytokamuro\Futils;
+use Kikytokamuro\Futils\IdentityMonad;
+use Kikytokamuro\Futils\ListMonad;
+use Kikytokamuro\Futils\MaybeMonad;
 
 class FutilsTest extends TestCase
 {
@@ -144,5 +147,41 @@ class FutilsTest extends TestCase
     public function testZip(): void
     {
         $this->assertEquals(Futils\zip([1, 2, 3])([4, 5, 6]), [[1, 4], [2, 5], [3, 6]]);
+    }
+
+    public function testIdentityMonad(): void
+    {
+        $result = (new Futils\IdentityMonad(100))
+            ->bind(fn($x, $n) => $x * $n, 2)
+            ->bind("strval")
+            ->extract();
+
+        $this->assertEquals($result, "200");
+    }
+
+    public function testMaybeMonad(): void
+    {
+        $bindtest = (new Futils\MaybeMonad("test"))
+            ->bind(fn() => new Futils\MaybeMonad(null))
+            ->extract();
+        $this->assertEquals($bindtest, null);
+
+        $bindtest2 = (new Futils\MaybeMonad(null))
+            ->bind(fn($x) => $x + 1);
+        $this->assertEquals($bindtest2, new Futils\MaybeMonad(null));
+
+        $unittest = new Futils\MaybeMonad(null);
+        $this->assertEquals($unittest, $unittest->unit(null));
+    }
+
+    public function testListMonad(): void
+    {
+        $result = (new Futils\ListMonad([
+            1, 
+            new IdentityMonad(2), 
+            new MaybeMonad(3), 
+            new ListMonad([4])
+        ]))->bind(fn($x) => $x + 100)->extract();
+        $this->assertEquals($result, [101, 102, 103, [104]]);
     }
 }
