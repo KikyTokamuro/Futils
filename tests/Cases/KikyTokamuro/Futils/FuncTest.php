@@ -53,6 +53,21 @@ class FuncTest extends TestCase
         $this->assertEquals(Func::contains("1")([1, 2, 3], false), true);
     }
 
+    public function testChunk(): void
+    {
+        $this->assertEquals(Func::chunk(2)([1, 2, 3, 4, 5]), [[1, 2], [3, 4], [5]]);
+    }
+
+    public function testChunkEmpty(): void
+    {
+        $this->assertEquals(Func::chunk(2)([]), []);
+    }
+
+    public function testChunkExact(): void
+    {
+        $this->assertEquals(Func::chunk(2)([1, 2, 3, 4]), [[1, 2], [3, 4]]);
+    }
+
     public function testDifference(): void
     {
         $this->assertEqualsCanonicalizing(
@@ -132,6 +147,19 @@ class FuncTest extends TestCase
     public function testIndexOfNotFound(): void
     {
         $this->assertNull(Func::indexOf("missing")([1, "test", 3]));
+    }
+
+    public function testIntersection(): void
+    {
+        $this->assertEqualsCanonicalizing(
+            array_values(Func::intersection([1, 2, 3, 4])([2, 3, 5])),
+            [2, 3]
+        );
+    }
+
+    public function testIntersectionEmpty(): void
+    {
+        $this->assertEquals(Func::intersection([1, 2])([3, 4]), []);
     }
 
     public function testJoin(): void
@@ -228,6 +256,27 @@ class FuncTest extends TestCase
     public function testTake(): void
     {
         $this->assertEquals(Func::take(2)([1, 2, 3, 4]), [1, 2]);
+    }
+
+    public function testUnion(): void
+    {
+        $this->assertEqualsCanonicalizing(
+            array_values(Func::union([1, 2, 3])([3, 4, 5])),
+            [1, 2, 3, 4, 5]
+        );
+    }
+
+    public function testUnionEmpty(): void
+    {
+        $this->assertEquals(Func::union([])([]), []);
+    }
+
+    public function testUnionNoOverlap(): void
+    {
+        $this->assertEqualsCanonicalizing(
+            array_values(Func::union([1, 2])([3, 4])),
+            [1, 2, 3, 4]
+        );
     }
 
     public function testWhen(): void

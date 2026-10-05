@@ -53,6 +53,15 @@ class Func
     }
 
     /**
+     * chunk - Split an array into chunks of the given size.
+     */
+    public static function chunk(int $size): \Closure
+    {
+        return fn(array $arr) =>
+            array_chunk($arr, $size);
+    }
+
+    /**
      * difference - Computes the difference of arrays.
      */
     public static function difference(array $arr): \Closure
@@ -133,6 +142,15 @@ class Func
     {
         return fn(array $arr, bool $strict = false) =>
             ($position = array_search($value, $arr, $strict)) === false ? null : $position;
+    }
+
+    /**
+     * intersection - Computes the intersection of arrays.
+     */
+    public static function intersection(array $arr): \Closure
+    {
+        return fn(array $arr2) =>
+            array_intersect($arr, $arr2);
     }
 
     /**
@@ -245,6 +263,15 @@ class Func
     {
         return fn(array $arr) =>
             array_slice($arr, 0, $count);
+    }
+
+    /**
+     * union - Computes the union of arrays (with deduplication).
+     */
+    public static function union(array $arr): \Closure
+    {
+        return fn(array $arr2) =>
+            array_unique(array_merge($arr, $arr2));
     }
 
     /**

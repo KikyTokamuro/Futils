@@ -38,6 +38,12 @@ Check whether a value is contained in a array.
 Func::contains(1337)([1, 1337, 2]) // => true
 ```
 
+#### Chunk
+Split an array into chunks of the given size.
+```php
+Func::chunk(2)([1, 2, 3, 4, 5]) // => [[1, 2], [3, 4], [5]]
+```
+
 #### Difference
 Computes the difference of arrays.
 ```php
@@ -84,6 +90,12 @@ Func::head([1, 2, 3]) // => 1
 Get first index of value in array.
 ```php
 Func::indexOf("test")([1, "test", 3]) // => 1
+```
+
+#### Intersection
+Computes the intersection of arrays.
+```php
+Func::intersection([1, 2, 3, 4])([2, 3, 5]) // => [2, 3]
 ```
 
 #### Join
@@ -156,6 +168,12 @@ Func::tail([1, 2, 3, 4, 5]) // => [2, 3, 4, 5]
 Get n first elements from array.
 ```php
 Func::take(2)([1, 2, 3, 4]) // => [1, 2]
+```
+
+#### Union
+Computes the union of arrays (with deduplication).
+```php
+Func::union([1, 2, 3])([3, 4, 5]) // => [1, 2, 3, 4, 5]
 ```
 
 #### When
