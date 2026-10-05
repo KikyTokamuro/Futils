@@ -1,45 +1,18 @@
 {
     "name": "kikytokamuro/futils",
     "description": "Functional utils",
-    "version": "0.3.0",
+    "version": "1.0.0",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
             "Kikytokamuro\\Futils\\": "src/"
-        },
-        "files": [
-            "src/all.php",
-            "src/always.php",
-            "src/any.php",
-            "src/compose.php",
-            "src/contains.php",
-            "src/difference.php",
-            "src/drop.php",
-            "src/filter.php",
-            "src/find.php",
-            "src/flatten.php",
-            "src/has.php",
-            "src/head.php",
-            "src/identityMonad.php",
-            "src/indexOf.php",
-            "src/join.php",
-            "src/last.php",
-            "src/listMonad.php",
-            "src/map.php",
-            "src/maybeMonad.php",
-            "src/merge.php",
-            "src/partial.php",
-            "src/partition.php",
-            "src/pipe.php",
-            "src/reduce.php",
-            "src/reject.php",
-            "src/replace.php",
-            "src/tail.php",
-            "src/take.php",
-            "src/when.php",
-            "src/zip.php"
-        ]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kikytokamuro\\Futils\\Tests\\": "tests/"
+        }
     },
     "authors": [
         {
@@ -48,10 +21,10 @@
         }
     ],
     "require": {
-        "php": ">=7.4"
+        "php": ">=8.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^13"
     },
     "scripts": {
         "test": "vendor/bin/phpunit -c phpunit.xml"

@@ -2,48 +2,50 @@
 
 declare(strict_types=1);
 
-namespace Kikytokamuro\Futils;
+namespace Kikytokamuro\Futils\Monad;
 
 /**
  * ListMonad - Abstracts away the concept of a list of items.
  */
-class ListMonad
+class ListMonad implements MonadInterface
 {
-    protected $value;
-    
+    protected array|\Traversable $value;
+
     /**
      * __construct
      *
-     * @param  mixed $value
+     * @param  array|\Traversable $value
      */
-    public function __construct($value)
+    public function __construct(array|\Traversable $value)
     {
-        if (!is_array($value) && !$value instanceof \Traversable) {
-            throw new \InvalidArgumentException('Must be traversable');
-        }
-
         $this->value = $value;
     }
-    
+
     /**
      * unit
      *
      * @param  mixed $value
      * @return ListMonad
      */
-    public static function unit($value)
+    public static function unit(mixed $value): self
     {
-        return new ListMonad($value);
+        if ($value instanceof ListMonad) {
+            return $value;
+        }
+        if ($value instanceof \Traversable || is_array($value)) {
+            return new ListMonad($value);
+        }
+        return new ListMonad([$value]);
     }
-    
+
     /**
      * bind
      *
      * @param  callable $f
-     * @param  mixed $args
+     * @param  mixed ...$args
      * @return ListMonad
      */
-    public function bind(callable $f, ...$args)
+    public function bind(callable $f, ...$args): self
     {
         $result = [];
 
@@ -67,7 +69,7 @@ class ListMonad
      *
      * @return array
      */
-    public function extract()
+    public function extract(): array
     {
         $result = [];
 
@@ -75,7 +77,7 @@ class ListMonad
             if (
                 $value instanceof IdentityMonad ||
                 $value instanceof MaybeMonad    ||
-                $value instanceof ListMonad 
+                $value instanceof ListMonad
             ) {
                 $result[] = $value->extract();
             } else {
