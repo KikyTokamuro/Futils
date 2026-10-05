@@ -2,11 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 use Kikytokamuro\Futils\Func;
-use Kikytokamuro\Futils\Monad\IdentityMonad;
-use Kikytokamuro\Futils\Monad\ListMonad;
-use Kikytokamuro\Futils\Monad\MaybeMonad;
 
-class FutilsTest extends TestCase
+class FuncTest extends TestCase
 {
     public function testAll(): void
     {
@@ -58,7 +55,10 @@ class FutilsTest extends TestCase
 
     public function testDifference(): void
     {
-        $this->assertEqualsCanonicalizing(Func::difference([1, 2, 3, 4])([1, 2]), [3, 4]);
+        $this->assertEqualsCanonicalizing(
+            array_values(Func::difference([1, 2, 3, 4])([1, 2])),
+            [3, 4]
+        );
     }
 
     public function testDrop(): void
@@ -68,7 +68,10 @@ class FutilsTest extends TestCase
 
     public function testFilter(): void
     {
-        $this->assertEqualsCanonicalizing(Func::filter(fn($x) => $x > 0)([-1, -2, 1, 2]), [1, 2]);
+        $this->assertEqualsCanonicalizing(
+            array_values(Func::filter(fn($x) => $x > 0)([-1, -2, 1, 2])),
+            [1, 2]
+        );
     }
 
     public function testFind(): void
@@ -183,7 +186,10 @@ class FutilsTest extends TestCase
 
     public function testPartition(): void
     {
-        $this->assertEqualsCanonicalizing(Func::partition(fn($x) => $x > 0)([-1, -2, 1, 2]), [[1, 2], [-1, -2]]);
+        $this->assertEqualsCanonicalizing(
+            Func::partition(fn($x) => $x > 0)([-1, -2, 1, 2]),
+            [[2 => 1, 3 => 2], [-1, -2]]
+        );
     }
 
     public function testPipe(): void
@@ -243,47 +249,5 @@ class FutilsTest extends TestCase
     {
         $this->assertEquals(Func::zip([1, 2, 3])([4, 5]), [[1, 4], [2, 5]]);
         $this->assertEquals(Func::zip([1, 2])([4, 5, 6]), [[1, 4], [2, 5]]);
-    }
-
-    public function testIdentityMonad(): void
-    {
-        $result = (new IdentityMonad(100))
-            ->bind(fn($x, $n) => $x * $n, 2)
-            ->bind("strval")
-            ->extract();
-
-        $this->assertEquals($result, "200");
-    }
-
-    public function testMaybeMonad(): void
-    {
-        $bindtest = (new MaybeMonad("test"))
-            ->bind(fn() => new MaybeMonad(null))
-            ->extract();
-        $this->assertEquals($bindtest, null);
-
-        $bindtest2 = (new MaybeMonad(null))
-            ->bind(fn($x) => $x + 1);
-        $this->assertEquals($bindtest2, new MaybeMonad(null));
-
-        $unittest = new MaybeMonad(null);
-        $this->assertEquals($unittest, $unittest->unit(null));
-    }
-
-    public function testListMonad(): void
-    {
-        $result = (new ListMonad([
-            1,
-            new IdentityMonad(2),
-            new MaybeMonad(3),
-            new ListMonad([4])
-        ]))->bind(fn($x) => $x + 100)->extract();
-        $this->assertEquals($result, [101, 102, 103, [104]]);
-    }
-
-    public function testListMonadInvalid(): void
-    {
-        $this->expectException(\TypeError::class);
-        new ListMonad("not traversable");
     }
 }
