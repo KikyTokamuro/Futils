@@ -46,8 +46,7 @@ class IdentityMonad implements MonadInterface
             $this->value instanceof MaybeMonad    ||
             $this->value instanceof ListMonad
         ) {
-            return new IdentityMonad(
-                $this->value->unit($this->value->bind($f, ...$args)));
+            return new IdentityMonad($this->value->unit($this->value->bind($f, ...$args)));
         } else {
             return new IdentityMonad($f($this->value, ...$args));
         }

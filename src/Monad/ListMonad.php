@@ -29,7 +29,13 @@ class ListMonad implements MonadInterface
      */
     public static function unit(mixed $value): self
     {
-        return new ListMonad($value);
+        if ($value instanceof ListMonad) {
+            return $value;
+        }
+        if ($value instanceof \Traversable || is_array($value)) {
+            return new ListMonad($value);
+        }
+        return new ListMonad([$value]);
     }
 
     /**
