@@ -245,3 +245,30 @@ Func::zip([1, 2, 3])([4, 5, 6]) // => [[1, 4], [2, 5], [3, 6]]
     ->bind(fn($x) => $x + 100)
     ->extract() // => [101, 102, 103, [104]]
 ```
+
+**EitherMonad** - Represents a value of one of two possible types (Left or Right). Right is the "success" case, Left is the "failure" case.
+```php
+Monad\EitherMonad::right(10)
+    ->bind(fn($x) => $x * 2)
+    ->bind(fn($x) => $x > 15 ? Monad\EitherMonad::right($x) : Monad\EitherMonad::left("Too small"))
+    ->fold(
+        fn($err) => "Error: $err",
+        fn($val) => "Success: $val"
+    ); // => "Success: 20"
+
+Monad\EitherMonad::left("error")
+    ->bind(fn($x) => $x * 2)
+    ->extract(); // => "error"
+```
+
+**TryMonad** - Represents a computation that may either result in an exception (Failure) or return a successfully computed value (Success).
+```php
+Monad\TryMonad::of(fn($json) => json_decode($json, true), '{"a":1}')
+    ->bind(fn($data) => $data['a'])
+    ->recover(fn($e) => null)
+    ->extract(); // => 1
+
+Monad\TryMonad::of(fn() => throw new \RuntimeException("error"))
+    ->bind(fn($x) => $x * 2)
+    ->getOrElse("default"); // => "default"
+```
