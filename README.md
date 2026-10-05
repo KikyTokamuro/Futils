@@ -116,6 +116,14 @@ Applying function to each element of array.
 Func::map(fn($x) => $x + 1)([1, 2, 3]) // => [2, 3, 4]
 ```
 
+#### Memoize
+Creates a memoized version of a function that caches results by arguments.
+```php
+$fn = Func::memoize(fn($x) => $x * 1000);
+$fn(5); // => calculates and caches
+$fn(5); // => returns cached result
+```
+
 #### Merge
 Merge two arrays.
 ```php
@@ -174,6 +182,20 @@ Func::replace([1, 2, 3])([1 => 3, 2 => 2]) // => [1, 3, 2]
 Get tail of array
 ```php
 Func::tail([1, 2, 3, 4, 5]) // => [2, 3, 4, 5]
+```
+
+#### Once
+Creates a function that is restricted to invoking the given function once.
+```php
+$init = Func::once(fn() => doSomething());
+$init(); // => executes
+$init(); // => returns cached result, no execution
+```
+
+#### Tap
+Invokes the interceptor and returns the value.
+```php
+Func::tap(fn($x) => log($x))($value) // => returns $value, calls log($x) as side effect
 ```
 
 #### Take

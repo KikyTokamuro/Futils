@@ -182,9 +182,103 @@ class FuncTest extends TestCase
         $this->assertEquals(Func::tail([1, 2, 3, 4, 5]), [2, 3, 4, 5]);
     }
 
+    public function testOnce(): void
+    {
+        $callCount = 0;
+        $fn = function () use (&$callCount) {
+            $callCount++;
+            return "result";
+        };
+
+        $once = Func::once($fn);
+
+        $this->assertEquals("result", $once());
+        $this->assertEquals("result", $once());
+        $this->assertEquals("result", $once());
+        $this->assertEquals(1, $callCount);
+    }
+
+    public function testOnceWithArgs(): void
+    {
+        $callCount = 0;
+        $fn = function ($x) use (&$callCount) {
+            $callCount++;
+            return $x * 2;
+        };
+
+        $once = Func::once($fn);
+
+        $this->assertEquals(10, $once(5));
+        $this->assertEquals(10, $once(10));
+        $this->assertEquals(1, $callCount);
+    }
+
+    public function testTap(): void
+    {
+        $sideEffect = null;
+        $result = Func::tap(function ($x) use (&$sideEffect) {
+            $sideEffect = $x * 2;
+        })(21);
+
+        $this->assertEquals(21, $result);
+        $this->assertEquals(42, $sideEffect);
+    }
+
+    public function testTapChaining(): void
+    {
+        $result = Func::pipe(
+            fn($x) => $x + 1,
+            Func::tap(fn($x) => $x * 0),
+            fn($x) => $x * 100
+        )(5);
+
+        $this->assertEquals(600, $result);
+    }
+
     public function testMap(): void
     {
         $this->assertEquals(Func::map(fn($x) => $x + 1)([1, 2, 3]), [2, 3, 4]);
+    }
+
+    public function testMemoize(): void
+    {
+        $callCount = 0;
+        $fn = function ($x) use (&$callCount) {
+            $callCount++;
+            return $x * 2;
+        };
+
+        $memoized = Func::memoize($fn);
+
+        $this->assertEquals(10, $memoized(5));
+        $this->assertEquals(10, $memoized(5));
+        $this->assertEquals(10, $memoized(5));
+        $this->assertEquals(1, $callCount);
+    }
+
+    public function testMemoizeMultipleArgs(): void
+    {
+        $callCount = 0;
+        $fn = function ($a, $b) use (&$callCount) {
+            $callCount++;
+            return $a + $b;
+        };
+
+        $memoized = Func::memoize($fn);
+
+        $this->assertEquals(5, $memoized(2, 3));
+        $this->assertEquals(5, $memoized(2, 3));
+        $this->assertEquals(7, $memoized(3, 4));
+        $this->assertEquals(2, $callCount);
+    }
+
+    public function testMemoizeDifferentArgs(): void
+    {
+        $fn = Func::memoize(fn($x) => $x * $x);
+
+        $this->assertEquals(4, $fn(2));
+        $this->assertEquals(9, $fn(3));
+        $this->assertEquals(16, $fn(4));
     }
 
     public function testMerge(): void

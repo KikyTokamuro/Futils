@@ -182,6 +182,21 @@ class Func
     }
 
     /**
+     * memoize - Creates a memoized version of a function that caches results by arguments.
+     */
+    public static function memoize(callable $f): \Closure
+    {
+        $cache = [];
+        return function (...$args) use ($f, &$cache) {
+            $key = serialize($args);
+            if (!array_key_exists($key, $cache)) {
+                $cache[$key] = $f(...$args);
+            }
+            return $cache[$key];
+        };
+    }
+
+    /**
      * merge - Merge two arrays.
      */
     public static function merge(array $arr): \Closure
@@ -272,6 +287,33 @@ class Func
     public static function tail(array $arr): array
     {
         return array_slice($arr, 1);
+    }
+
+    /**
+     * once - Creates a function that is restricted to invoking the given function once.
+     */
+    public static function once(callable $f): \Closure
+    {
+        $called = false;
+        $result = null;
+        return function (...$args) use ($f, &$called, &$result) {
+            if (!$called) {
+                $called = true;
+                $result = $f(...$args);
+            }
+            return $result;
+        };
+    }
+
+    /**
+     * tap - Invokes the interceptor and returns the value.
+     */
+    public static function tap(callable $interceptor): \Closure
+    {
+        return function ($value) use ($interceptor) {
+            $interceptor($value);
+            return $value;
+        };
     }
 
     /**
