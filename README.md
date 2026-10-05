@@ -122,10 +122,22 @@ Merge two arrays.
 Func::merge([1, 2])([3, 4]) // => [1, 2, 3, 4]
 ```
 
+#### Omit
+Returns an array without the specified keys.
+```php
+Func::omit(['b'])(['a' => 1, 'b' => 2, 'c' => 3]) // => ['a' => 1, 'c' => 3]
+```
+
 #### Partial
 Create partial function.
 ```php
 Func::partial(fn($x, $y, $z) => $x + $y + $z)(1, 2)(3) // => 6
+```
+
+#### Pick
+Returns an array with only the specified keys.
+```php
+Func::pick(['a', 'c'])(['a' => 1, 'b' => 2, 'c' => 3]) // => ['a' => 1, 'c' => 3]
 ```
 
 #### Partition

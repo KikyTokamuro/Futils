@@ -191,6 +191,15 @@ class Func
     }
 
     /**
+     * omit - Returns an array without the specified keys.
+     */
+    public static function omit(array $keys): \Closure
+    {
+        return fn(array $arr) =>
+            array_diff_key($arr, array_flip($keys));
+    }
+
+    /**
      * partial - Create partial function.
      */
     public static function partial(callable $f, ...$args): mixed
@@ -201,6 +210,15 @@ class Func
         return count($args) >= $arity
             ? $f(...$args)
             : fn(...$rest) => self::partial($f, ...array_merge($args, $rest));
+    }
+
+    /**
+     * pick - Returns an array with only the specified keys.
+     */
+    public static function pick(array $keys): \Closure
+    {
+        return fn(array $arr) =>
+            array_intersect_key($arr, array_flip($keys));
     }
 
     /**

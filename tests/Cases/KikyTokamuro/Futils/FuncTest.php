@@ -192,9 +192,57 @@ class FuncTest extends TestCase
         $this->assertEquals(Func::merge([1, 2])([3, 4]), [1, 2, 3, 4]);
     }
 
+    public function testOmit(): void
+    {
+        $this->assertEquals(
+            Func::omit(['b'])(['a' => 1, 'b' => 2, 'c' => 3]),
+            ['a' => 1, 'c' => 3]
+        );
+    }
+
+    public function testOmitMultipleKeys(): void
+    {
+        $this->assertEquals(
+            Func::omit(['a', 'c'])(['a' => 1, 'b' => 2, 'c' => 3]),
+            ['b' => 2]
+        );
+    }
+
+    public function testOmitNonExistentKey(): void
+    {
+        $this->assertEquals(
+            Func::omit(['x'])(['a' => 1, 'b' => 2]),
+            ['a' => 1, 'b' => 2]
+        );
+    }
+
     public function testPartial(): void
     {
         $this->assertEquals(Func::partial(fn($x, $y, $z) => $x + $y + $z)(1, 2)(3), 6);
+    }
+
+    public function testPick(): void
+    {
+        $this->assertEquals(
+            Func::pick(['a', 'c'])(['a' => 1, 'b' => 2, 'c' => 3]),
+            ['a' => 1, 'c' => 3]
+        );
+    }
+
+    public function testPickSingleKey(): void
+    {
+        $this->assertEquals(
+            Func::pick(['b'])(['a' => 1, 'b' => 2, 'c' => 3]),
+            ['b' => 2]
+        );
+    }
+
+    public function testPickNonExistentKey(): void
+    {
+        $this->assertEquals(
+            Func::pick(['x'])(['a' => 1, 'b' => 2]),
+            []
+        );
     }
 
     public function testPartialWithFalse(): void
