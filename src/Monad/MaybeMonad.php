@@ -2,44 +2,44 @@
 
 declare(strict_types=1);
 
-namespace Kikytokamuro\Futils;
+namespace Kikytokamuro\Futils\Monad;
 
 /**
  * MaybeMonad - Encapsulates the type of an undefined value.
  */
-class MaybeMonad
+class MaybeMonad implements MonadInterface
 {
-    protected $value;
-    
+    protected mixed $value;
+
     /**
      * __construct
      *
-     * @param mixed $value
+     * @param  mixed $value
      */
-    public function __construct($value)
+    public function __construct(mixed $value)
     {
         $this->value = $value;
     }
-    
+
     /**
      * unit
      *
      * @param  mixed $value
      * @return MaybeMonad
      */
-    public static function unit($value)
+    public static function unit(mixed $value): self
     {
         return new MaybeMonad($value);
     }
-    
+
     /**
      * bind
      *
      * @param  callable $f
-     * @param  mixed $args
+     * @param  mixed ...$args
      * @return MaybeMonad
      */
-    public function bind(callable $f, ...$args)
+    public function bind(callable $f, ...$args): self
     {
         if (is_null($this->value)) {
             return new MaybeMonad(null);
@@ -60,7 +60,7 @@ class MaybeMonad
      *
      * @return mixed
      */
-    public function extract()
+    public function extract(): mixed
     {
         if (
             $this->value instanceof IdentityMonad ||

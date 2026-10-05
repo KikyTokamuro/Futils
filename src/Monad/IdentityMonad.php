@@ -2,43 +2,44 @@
 
 declare(strict_types=1);
 
-namespace Kikytokamuro\Futils;
+namespace Kikytokamuro\Futils\Monad;
 
 /**
  * IdentityMonad - Just annotates plain values and functions to satisfy the monad laws.
  */
-class IdentityMonad {
-    protected $value;
-    
+class IdentityMonad implements MonadInterface
+{
+    protected mixed $value;
+
     /**
      * __construct
      *
      * @param  mixed $value
      */
-    public function __construct($value)
+    public function __construct(mixed $value)
     {
         $this->value = $value;
     }
-    
+
     /**
      * unit
      *
      * @param  mixed $value
-     * @return IndentityMonad
+     * @return IdentityMonad
      */
-    public static function unit($value)
+    public static function unit(mixed $value): self
     {
         return new IdentityMonad($value);
     }
-    
+
     /**
      * bind
      *
      * @param  callable $f
-     * @param  mixed $args
-     * @return IndentityMonad
+     * @param  mixed ...$args
+     * @return IdentityMonad
      */
-    public function bind(callable $f, ...$args)
+    public function bind(callable $f, ...$args): self
     {
         if (
             $this->value instanceof IdentityMonad ||
@@ -57,7 +58,7 @@ class IdentityMonad {
      *
      * @return mixed
      */
-    public function extract()
+    public function extract(): mixed
     {
         if (
             $this->value instanceof IdentityMonad ||
